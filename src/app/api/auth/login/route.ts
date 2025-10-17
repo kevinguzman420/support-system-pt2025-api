@@ -46,6 +46,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Verificar que el usuario esté activo
+    if (!user.active) {
+      return createCorsResponse(
+        { message: "Invalid credentials" },
+        { status: 401 },
+        request
+      );
+    }
+
     // Create JWT token
     const token = jwt.sign(
       {

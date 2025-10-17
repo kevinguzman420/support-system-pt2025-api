@@ -39,6 +39,13 @@ export async function GET(
             id: true,
             content: true,
             createdAt: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
           },
         },
       },
