@@ -47,6 +47,7 @@ model User {
   password  String
   name      String
   role      Role     @default(CLIENT) // Default role is client
+  active    Boolean  @default(true) // Whether the user is active
   // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
