@@ -12,17 +12,9 @@ const corsOptions = {
     "http://127.0.0.1:3000",
     "http://127.0.0.1:3001",
     "http://127.0.0.1:5173",
-    // PRODUCTION DOMAINS - Replace with your actual domains
+    // PRODUCTION DOMAINS
+    "https://support-system-pt2025.netlify.app", // Frontend en Netlify
     ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
-    // TODO: Modificar esto cuando sepa los dominios de producción:
-    ...(process.env.NODE_ENV === "production"
-      ? [
-          // 'https://yourdomain.com',
-          // 'https://www.yourdomain.com',
-          // 'https://app.yourdomain.com',
-          // 'https://admin.yourdomain.com'
-        ]
-      : []),
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: [

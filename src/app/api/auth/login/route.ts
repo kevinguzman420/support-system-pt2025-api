@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
     response.cookies.set("token", token, {
       httpOnly: true,
       secure: isProduction, // true solo en producción
-      sameSite: isProduction ? "strict" : "lax", // ⬅️ 'lax' en desarrollo
+      sameSite: "none", // ⬅️ 'none' para permitir cross-site en producción (Netlify -> Vercel)
       maxAge: 24 * 60 * 60, // 24 hours
       path: "/", // ⬅️ Importante: disponible en todas las rutas
     });
