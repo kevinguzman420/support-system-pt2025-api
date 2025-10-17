@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Enums to define allowed values
+enum Role {
+  ADMIN // Administrator role
+  SUPPORT // Support staff role (Soporte)
+  CLIENT // Client role (Cliente)
+}
+
+enum RequestStatus {
+  PENDING // Pending status (Pendiente)
+  IN_PROGRESS // In progress status (En proceso)
+  RESOLVED // Resolved status (Resuelto)
+  CLOSED // Closed status (Cerrado)
+}
+
+enum RequestPriority {
+  LOW // Low priority (Baja)
+  MEDIUM // Medium priority (Media)
+  HIGH // High priority (Alta)
+  CRITICAL // Critical priority (Crítica)
+}
+
+enum RequestCategory {
+  TECHNICAL_SUPPORT // Soporte Técnico
+  GENERAL_INQUIRY // Consulta General
+  ACCESS_ISSUE // Problema de Acceso
+  BILLING // Facturación
+  OTHER // Otro
+}
+
+// User model - represents system users
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(CLIENT) // Default role is client
+  active    Boolean  @default(true) // Whether the user is active
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  requests  Request[]  @relation("UserRequests") // Support requests created by user (Solicitudes)
+  responses Response[] @relation("UserResponses") // Responses given by user (Respuestas)
+
+  @@map("users")
+}
+
+// Support request model - represents customer support tickets
+model Request {
+  id          String          @id @default(cuid())
+  title       String
+  description String
+  status      RequestStatus   @default(PENDING)
+  priority    RequestPriority @default(MEDIUM)
+  category    RequestCategory @default(TECHNICAL_SUPPORT)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  // Relation with user who creates the request
+  userId String
+  user   User   @relation("UserRequests", fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relation with responses
+  responses Response[] @relation("RequestResponses") // Request responses (Respuestas)
+
+  @@map("requests") // Table name: requests (solicitudes)
+}
+
+// Response model - represents responses to support requests
+model Response {
+  id          String  @id @default(cuid())
+  content     String // Response content (Contenido)
+  isAutomatic Boolean @default(false) // Whether response is automatic (Es automática)
+
+  // Relation with request
+  requestId String
+  request   Request @relation("RequestResponses", fields: [requestId], references: [id], onDelete: Cascade)
+
+  // Relation with user who responds
+  userId String
+  user   User   @relation("UserResponses", fields: [userId], references: [id], onDelete: Cascade)
+
+  // Timestamp
+  createdAt DateTime @default(now()) // Response date (Fecha)
+
+  @@map("responses") // Table name: responses (respuestas)
+}
