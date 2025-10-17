@@ -1,4 +1,8 @@
 import { PrismaClient } from '../../generated/prisma'
+import { initializeDatabase } from './db-init'
+
+// Inicializar la base de datos en Vercel (copiar a /tmp)
+initializeDatabase()
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
 
