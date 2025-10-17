@@ -4,7 +4,7 @@ API RESTful para sistema de gestión de tickets de soporte técnico, construida 
 
 ## 🌐 Despliegue en Producción
 
-**URL de Producción:** [AGREGAR_URL_DE_VERCEL_AQUÍ]
+**URL de Producción (API, no posee interfaz):** [https://support-system-pt2025-api.vercel.app]
 
 ## 🏗️ Arquitectura del Sistema
 
@@ -57,25 +57,21 @@ Roles de Usuario:
 ### Prerrequisitos
 
 - **Node.js** >= 18.x
-- **npm**, **yarn**, **pnpm** o **bun**
+- De preferencia usar: **pnpm**
 
 ### Pasos de Instalación
 
 1. **Clonar el repositorio**
 
 ```bash
-git clone <URL_DEL_REPOSITORIO>
+git clone <https://github.com/kevinguzman420/support-system-pt2025-api>
 cd pt2025-api
 ```
 
 2. **Instalar dependencias**
 
 ```bash
-npm install
-# o
 pnpm install
-# o
-yarn install
 ```
 
 3. **Configurar variables de entorno**
@@ -105,7 +101,7 @@ npx prisma generate
 npx prisma migrate dev --name init
 ```
 
-6. **Poblar base de datos con datos de prueba (seed)**
+6. **Poblar base de datos con datos de prueba (seed), aunque no es necesario**
 
 ```bash
 npx prisma db seed
@@ -113,20 +109,16 @@ npx prisma db seed
 
 Este comando creará 3 usuarios de prueba:
 
-| Email | Password | Rol | Activo |
-|-------|----------|-----|--------|
-| admin@example.com | demo123 | ADMIN | ✅ |
-| support@example.com | demo123 | SUPPORT | ✅ |
-| client@example.com | demo123 | CLIENT | ✅ |
+| Email               | Password | Rol     | Activo |
+| ------------------- | -------- | ------- | ------ |
+| admin@example.com   | demo123  | ADMIN   | ✅     |
+| support@example.com | demo123  | SUPPORT | ✅     |
+| client@example.com  | demo123  | CLIENT  | ✅     |
 
 7. **Iniciar el servidor de desarrollo**
 
 ```bash
-npm run dev
-# o
 pnpm dev
-# o
-yarn dev
 ```
 
 La API estará disponible en: **http://localhost:3000**
@@ -135,13 +127,14 @@ La API estará disponible en: **http://localhost:3000**
 
 ### 🔐 Autenticación
 
-| Método | Endpoint | Descripción | Autenticación |
-|--------|----------|-------------|---------------|
-| `POST` | `/api/auth/login` | Iniciar sesión | ❌ |
-| `POST` | `/api/auth/logout` | Cerrar sesión | ✅ |
-| `GET` | `/api/auth/login` | Información del endpoint | ❌ |
+| Método | Endpoint           | Descripción              | Autenticación |
+| ------ | ------------------ | ------------------------ | ------------- |
+| `POST` | `/api/auth/login`  | Iniciar sesión           | ❌            |
+| `POST` | `/api/auth/logout` | Cerrar sesión            | ✅            |
+| `GET`  | `/api/auth/login`  | Información del endpoint | ❌            |
 
 **Ejemplo Login:**
+
 ```json
 POST /api/auth/login
 {
@@ -166,12 +159,13 @@ Respuesta:
 
 ### 👤 Perfil de Usuario
 
-| Método | Endpoint | Descripción | Roles |
-|--------|----------|-------------|-------|
-| `GET` | `/api/private/me` | Obtener datos del usuario actual | Todos |
-| `PUT` | `/api/private/me` | Actualizar contraseña del usuario | Todos |
+| Método | Endpoint          | Descripción                       | Roles |
+| ------ | ----------------- | --------------------------------- | ----- |
+| `GET`  | `/api/private/me` | Obtener datos del usuario actual  | Todos |
+| `PUT`  | `/api/private/me` | Actualizar contraseña del usuario | Todos |
 
 **Ejemplo Cambiar Contraseña:**
+
 ```json
 PUT /api/private/me
 Headers: { "Authorization": "Bearer <token>" }
@@ -182,14 +176,15 @@ Headers: { "Authorization": "Bearer <token>" }
 
 ### 🎫 Gestión de Solicitudes (Requests)
 
-| Método | Endpoint | Descripción | Roles |
-|--------|----------|-------------|-------|
-| `GET` | `/api/private/requests` | Listar solicitudes | Todos* |
-| `POST` | `/api/private/requests` | Crear nueva solicitud | Todos |
+| Método | Endpoint                | Descripción           | Roles   |
+| ------ | ----------------------- | --------------------- | ------- |
+| `GET`  | `/api/private/requests` | Listar solicitudes    | Todos\* |
+| `POST` | `/api/private/requests` | Crear nueva solicitud | Todos   |
 
-*Los CLIENT solo ven sus propias solicitudes, ADMIN/SUPPORT ven todas.
+\*Los CLIENT solo ven sus propias solicitudes, ADMIN/SUPPORT ven todas.
 
 **Ejemplo Crear Solicitud:**
+
 ```json
 POST /api/private/requests
 Headers: { "Authorization": "Bearer <token>" }
@@ -208,16 +203,17 @@ Valores permitidos:
 
 ### 💬 Gestión de Respuestas (Responses)
 
-| Método | Endpoint | Descripción | Roles |
-|--------|----------|-------------|-------|
-| `GET` | `/api/private/responses` | Listar respuestas | Todos* |
-| `GET` | `/api/private/responses?requestId=xxx` | Respuestas de una solicitud específica | Todos* |
-| `POST` | `/api/private/responses` | Crear respuesta | Todos** |
+| Método | Endpoint                               | Descripción                            | Roles     |
+| ------ | -------------------------------------- | -------------------------------------- | --------- |
+| `GET`  | `/api/private/responses`               | Listar respuestas                      | Todos\*   |
+| `GET`  | `/api/private/responses?requestId=xxx` | Respuestas de una solicitud específica | Todos\*   |
+| `POST` | `/api/private/responses`               | Crear respuesta                        | Todos\*\* |
 
-*Los CLIENT solo ven respuestas de sus propias solicitudes.  
-**Los CLIENT solo pueden responder a sus propias solicitudes.
+\*Los CLIENT solo ven respuestas de sus propias solicitudes.  
+\*\*Los CLIENT solo pueden responder a sus propias solicitudes.
 
 **Ejemplo Crear Respuesta:**
+
 ```json
 POST /api/private/responses
 Headers: { "Authorization": "Bearer <token>" }
@@ -230,13 +226,14 @@ Headers: { "Authorization": "Bearer <token>" }
 
 ### 👥 Administración de Usuarios (Solo ADMIN)
 
-| Método | Endpoint | Descripción | Roles |
-|--------|----------|-------------|-------|
-| `GET` | `/api/private/admin/users` | Listar todos los usuarios | ADMIN |
-| `POST` | `/api/private/admin/users` | Crear nuevo usuario | ADMIN |
-| `PATCH` | `/api/private/admin/users/:userId` | Actualizar usuario | ADMIN |
+| Método  | Endpoint                           | Descripción               | Roles |
+| ------- | ---------------------------------- | ------------------------- | ----- |
+| `GET`   | `/api/private/admin/users`         | Listar todos los usuarios | ADMIN |
+| `POST`  | `/api/private/admin/users`         | Crear nuevo usuario       | ADMIN |
+| `PATCH` | `/api/private/admin/users/:userId` | Actualizar usuario        | ADMIN |
 
 **Ejemplo Crear Usuario:**
+
 ```json
 POST /api/private/admin/users
 Headers: { "Authorization": "Bearer <token>" }
@@ -252,6 +249,7 @@ Roles permitidos: "ADMIN" | "SUPPORT" | "CLIENT"
 ```
 
 **Ejemplo Actualizar Usuario:**
+
 ```json
 PATCH /api/private/admin/users/clxxx...
 Headers: { "Authorization": "Bearer <token>" }
@@ -277,16 +275,17 @@ El token expira en **24 horas**.
 fetch('http://localhost:3000/api/private/requests', {
   method: 'GET',
   headers: {
-    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIs...',
-    'Content-Type': 'application/json'
+    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIs...',
+    'Content-Type': 'application/json',
   },
-  credentials: 'include' // Para cookies
+  credentials: 'include', // Para cookies
 })
 ```
 
 ## 🗃️ Modelo de Datos
 
 ### User (Usuario)
+
 ```typescript
 {
   id: string
@@ -301,14 +300,19 @@ fetch('http://localhost:3000/api/private/requests', {
 ```
 
 ### Request (Solicitud)
+
 ```typescript
 {
   id: string
   title: string
   description: string
-  status: "PENDING" | "IN_PROGRESS" | "RESOLVED" | "CLOSED"
-  priority: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL"
-  category: "TECHNICAL_SUPPORT" | "GENERAL_INQUIRY" | "ACCESS_ISSUE" | "BILLING" | "OTHER"
+  status: 'PENDING' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED'
+  priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
+  category: 'TECHNICAL_SUPPORT' |
+    'GENERAL_INQUIRY' |
+    'ACCESS_ISSUE' |
+    'BILLING' |
+    'OTHER'
   userId: string
   createdAt: DateTime
   updatedAt: DateTime
@@ -316,6 +320,7 @@ fetch('http://localhost:3000/api/private/requests', {
 ```
 
 ### Response (Respuesta)
+
 ```typescript
 {
   id: string
@@ -407,6 +412,7 @@ npx prisma db seed
 ## 🌍 CORS
 
 La API permite peticiones desde:
+
 - `http://localhost:3000`
 - `http://localhost:3001`
 - `http://localhost:5173` (Vite)
@@ -416,10 +422,8 @@ La API permite peticiones desde:
 ## 📝 Scripts Disponibles
 
 ```bash
-npm run dev          # Iniciar servidor de desarrollo
-npm run build        # Compilar para producción
-npm start            # Iniciar servidor de producción
-npm run lint         # Ejecutar linter
+pnpm dev          # Iniciar servidor de desarrollo
+pnpm build        # Compilar para producción
 
 npx prisma studio    # Abrir Prisma Studio
 npx prisma generate  # Generar cliente Prisma
@@ -439,12 +443,19 @@ Este proyecto está optimizado para desplegarse en Vercel:
    - `NODE_ENV=production`
 4. Deploy automático
 
-**URL de producción:** [AGREGAR_URL_AQUÍ]
+**URL de producción:** [https://support-system-pt2025-api.vercel.app]
 
 ## 📄 Licencia
 
-Este proyecto fue desarrollado como prueba técnica 2025.
+Este proyecto fue desarrollado como prueba técnica 2025 para CIFRA.
 
 ---
 
-Desarrollado con ❤️ usando Next.js y Prisma
+## 👥 Autor
+
+**Kevin Guzmán**
+- Email: kevinjguzmano777@outlook.com
+- GitHub: [@kevinguzman420](https://github.com/kevinguzman420)
+- Deplegado en[Vercel](https://vercel.com) 
+
+Desarrollado con ❤️ por Kevin Guzmán (Powered by AI)
