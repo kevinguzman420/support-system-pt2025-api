@@ -169,7 +169,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/kevinguzman/Documentos/Programming/prueba-tecnica-2025/pt2025-api/generated/prisma",
+      "value": "/vercel/sandbox/primary/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -178,7 +178,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-1.1.x",
+        "value": "rhel-openssl-3.0.x",
         "native": true
       },
       {
@@ -187,7 +187,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/kevinguzman/Documentos/Programming/prueba-tecnica-2025/pt2025-api/prisma/schema.prisma",
+    "sourceFilePath": "/vercel/sandbox/primary/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
